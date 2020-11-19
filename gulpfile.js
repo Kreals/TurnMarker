@@ -161,9 +161,11 @@ function buildSASS() {
  */
 async function copyFiles() {
 	const statics = [
-		'lang',
-		'fonts',
 		'assets',
+		'css',
+		'fonts',
+		'lang',
+		'scripts',
 		'templates',
 		'module.json',
 		'system.json',
@@ -257,12 +259,12 @@ async function linkUserData() {
 	let destDir;
 	try {
 		if (
-			fs.existsSync(path.resolve('.', 'dist', 'module.json')) ||
+			//fs.existsSync(path.resolve('.', 'dist', 'module.json')) ||
 			fs.existsSync(path.resolve('.', 'src', 'module.json'))
 		) {
 			destDir = 'modules';
 		} else if (
-			fs.existsSync(path.resolve('.', 'dist', 'system.json')) ||
+			//fs.existsSync(path.resolve('.', 'dist', 'system.json')) ||
 			fs.existsSync(path.resolve('.', 'src', 'system.json'))
 		) {
 			destDir = 'systems';
@@ -294,7 +296,8 @@ async function linkUserData() {
 			console.log(
 				chalk.green(`Copying build to ${chalk.blueBright(linkDir)}`)
 			);
-			await fs.symlink(path.resolve('./dist'), linkDir);
+			//await fs.symlink(path.resolve('./dist'), linkDir);
+			await fs.symlink(path.resolve('./src'), linkDir);
 		}
 		return Promise.resolve();
 	} catch (err) {

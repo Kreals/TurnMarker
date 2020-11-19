@@ -1,0 +1,39 @@
+{
+	"name": "turnmarker",
+	"title": "Turn Marker",
+	"description": "Displays a (optionally animated) marker on the token who's active turn it is.",
+	"author": "Brunhine, Kreals",
+	"version": "2.6.13",
+	"minimumCoreVersion": "0.5.6",
+	"compatibleCoreVersion": "0.6.2",
+	"esmodules": [
+		"scripts/turnmarker.js"
+	],
+	"socket": true,
+	"styles": ["css/turnmarker.css"],
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "lang/en.json"
+		},
+		{
+			"lang": "de",
+			"name": "German",
+			"path": "lang/de.json"
+		},
+		{
+			"lang": "ko",
+			"name": "Korean",
+			"path": "lang/ko.json"
+		},
+		{
+			"lang": "ja",
+			"name": " 日本語",
+			"path": "lang/ja.json"
+		}
+	],
+	"url": "https://github.com/Kreals/TurnMarker.git",
+	"manifest": "https://raw.githubusercontent.com/Kreals/TurnMarker/main/src/module.json",
+	"download": "https://raw.githubusercontent.com/Kreals/TurnMarker/v2.6.13/package/turnmarker-v2.6.13.zip"
+}
