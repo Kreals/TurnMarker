@@ -7,10 +7,14 @@ export class MarkerAnimation {
      * @param {String} tileId - The ID of the tile currently serving as the turn marker 
      */
     static startAnimation(animator, tileId) {
-        let tile = canvas.scene.getEmbeddedEntity('Tile', tileId);
-        animator = this.animateRotation.bind(tile);
-        canvas.app.ticker.add(animator);
-        return animator;
+        if (!game.paused && Settings.getShouldAnimate()) {
+            let tile = canvas.scene.getEmbeddedEntity('Tile', tileId);
+            animator = this.animateRotation.bind(tile);
+            canvas.app.ticker.add(animator);
+            return animator;
+        }else{
+            return undefined
+        }
     }
 
     /**

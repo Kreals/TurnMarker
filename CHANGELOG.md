@@ -1,3 +1,7 @@
+# 2.6.21
+- Fixed a bug where tokenless combatants threw an error and left the turn marker would stay on the previous token. Now the token marker dissappears when a tokenless combatent is taking a turn and reappears when the next combantent with a token takes a turn.
+
+
 # 2.6.20
 - Rearrange repo for new workflow
 
