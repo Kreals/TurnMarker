@@ -1,3 +1,6 @@
+# 2.6.17
+- Rearrange repo for new workflow
+
 # 2.6.9
 - Fix console error when moving token outside of combat
 
