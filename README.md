@@ -57,18 +57,15 @@ If enabled, a chat message will be sent when the turn in combat changes (unless 
 Most recently tested on [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") version 0.5.5 (beta).
 
 ## Feedback
-All feedback and suggestions are welcome. Please contact me on Discord (Brunhine#2182).
-
-Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://gitlab.com/brunhine/foundry-turnmarker/-/issues "Issue Tracker")
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/Kreals/TurnMarker/issues "Issue Tracker")
 
 ## Support Development
-Want to help improve the module? Send a pull request, or contact me on Discord (Brunhine#2182)
-
-Want to show support another way? Recommend this module to other users and/or consider becoming a patron on [Patreon](https://patreon.com/brunhine "Brunhine's Patreon") or donating through [Ko-Fi](https://ko-fi.com/brunhine)
+Want to help improve the module? Send a pull request
 
 ## Licensing
 **Turn Marker** is a module for [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") initially made by Jeremiah Altepeter and is currently maintained by Kreals. It is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
 
 This work is licensed under Foundry Virtual Tabletop [EULA - Limited License Agreement for module development v 0.1.6](https://foundryvtt.com/article/license/).
 
+The previous work can be found at [Brunhine's github repository](https://github.com/Brunhine/TurnMarker) 
 The included images are created by [Rin](https://foundryvtt.com/community/rin) (rin#0002 on Discord)
