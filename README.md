@@ -68,4 +68,5 @@ Want to help improve the module? Send a pull request
 This work is licensed under Foundry Virtual Tabletop [EULA - Limited License Agreement for module development v 0.1.6](https://foundryvtt.com/article/license/).
 
 The previous work can be found at [Brunhine's github repository](https://github.com/Brunhine/TurnMarker) 
+
 The included images are created by [Rin](https://foundryvtt.com/community/rin) (rin#0002 on Discord)
