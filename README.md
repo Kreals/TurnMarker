@@ -1,12 +1,10 @@
 # Turn Marker
 **Turn Marker** is a module for [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") that adds an image under a token who is currently active in the combat tracker. This is completely system agnostic, and fully customizable to fit right into your game.
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/brunhine/turnmarker?style=flat-square)
-![GitHub latest version downloads](https://img.shields.io/github/downloads/brunhine/turnmarker/latest/total?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/Kreals/TurnMarker?style=flat-square)
+![GitHub previous downloads](https://img.shields.io/github/downloads/brunhine/turnmarker/latest/total?style=flat-square)
+![GitHub current downloads](https://img.shields.io/github/downloads/Kreals/TurnMarker/latest/total?style=flat-square)
 
-[![Twitter Follow](https://img.shields.io/badge/follow-%40Brunhine-blue.svg?style=flat-square&logo=twitter)](https://twitter.com/brunhine)
-[![Become a Patron](https://img.shields.io/badge/support-patreon-orange.svg?style=flat-square&logo=patreon)](https://www.patreon.com/brunhine)
-[![Donate via Ko-Fi](https://img.shields.io/badge/support-ko--fi-ff4646?style=flat-square&logo=ko-fi)](https://ko-fi.com/brunhine)
 
 ## Installation
 It's always better and easier to install modules through in in app browser. Just search for "Turn Marker"
@@ -69,7 +67,7 @@ Want to help improve the module? Send a pull request, or contact me on Discord (
 Want to show support another way? Recommend this module to other users and/or consider becoming a patron on [Patreon](https://patreon.com/brunhine "Brunhine's Patreon") or donating through [Ko-Fi](https://ko-fi.com/brunhine)
 
 ## Licensing
-**Turn Msrker** is a module for [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") by Jeremiah Altepeter and is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
+**Turn Marker** is a module for [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") initially made by Jeremiah Altepeter and is currently maintained by Kreals. It is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
 
 This work is licensed under Foundry Virtual Tabletop [EULA - Limited License Agreement for module development v 0.1.6](https://foundryvtt.com/article/license/).
 
