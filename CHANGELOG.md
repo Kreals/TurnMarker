@@ -1,5 +1,10 @@
 # 2.6.21
+- Fixed an issue where marker tile wouldn't re-appear if the token visibility was toggeled back on during it's turn
+
+# 2.6.21
 - Fixed a bug where tokenless combatants threw an error and left the turn marker would stay on the previous token. Now the token marker dissappears when a tokenless combatent is taking a turn and reappears when the next combantent with a token takes a turn.
+
+- Fixed an issue with rotation not stopping on pause and occasionally increaing speed due to bad variable assignments
 
 
 # 2.6.20

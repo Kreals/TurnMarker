@@ -5,7 +5,7 @@
 
 
 ## Installation
-It's always better and easier to install modules through in in app browser. Just search for "Turn Marker"
+It's always better and easier to install modules through the in app browser. Just search for "Turn Marker"
 
 To install this module manually:
 1. Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"

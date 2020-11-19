@@ -9,11 +9,11 @@ let animator;
 let markerId;
 let lastTurn = '';
 let verbose = true
+let token_magic = false
+
+CONFIG.debug.hooks = true
 
 Hooks.on('ready', async () => {
-    if(verbose){console.log('ready')}
-    console.log(animator, markerId, lastTurn, verbose)
-
     Settings.registerSettings();
     let marker = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
     if (marker && marker.id) {
@@ -39,12 +39,15 @@ Hooks.on('ready', async () => {
             }
         }
     });
+
+    // let tm = game.modules.get("tokenmagic")
+    // if (tm?.active){
+    //     token_magic = tm
+    //     console.log(tm)
+    // }
 });
 
 Hooks.on('createTile', (scene, tile) => {
-    if(verbose){console.log('createTile')}
-    console.log(animator, markerId, lastTurn, verbose)
-
     if (tile.flags.turnMarker == true) {
         markerId = tile._id;
         tile = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
@@ -55,9 +58,6 @@ Hooks.on('createTile', (scene, tile) => {
 });
 
 Hooks.on('preUpdateToken', async (scene, token) => {
-    if(verbose){console.log('preUpdateToken')}
-    console.log(animator, markerId, lastTurn, verbose)
-
     if (game.combat) {
         if (token._id == game.combat.combatant.token._id && !canvas.scene.getFlag(FlagScope, Flags.startMarkerPlaced)) {
             await Marker.placeStartMarker(game.combat.combatant.token._id);
@@ -66,9 +66,6 @@ Hooks.on('preUpdateToken', async (scene, token) => {
 });
 
 Hooks.on('updateCombat', async (combat, update) => {
-    if(verbose){console.log('updateCombat')}
-    console.log(animator, markerId, lastTurn, verbose)
-
     if (combat.combatant) {
         if (update && lastTurn != combat.combatant._id && game.user.isGM && game.userId == firstGM()) {
             lastTurn = combat.combatant._id;
@@ -78,7 +75,6 @@ Hooks.on('updateCombat', async (combat, update) => {
                 console.log(result)
                 if (result) {
                     markerId = result;
-                    console.log(animator, markerId)
                 }
                 if (Settings.getTurnMarkerEnabled()) {
                     Marker.deleteStartMarker();
@@ -96,9 +92,6 @@ Hooks.on('updateCombat', async (combat, update) => {
 });
 
 Hooks.on('deleteCombat', async () => {
-    if(verbose){console.log('deleteCombat')}
-    console.log(animator, markerId, lastTurn, verbose)
-
     if (game.user.isGM) {
         Marker.clearAllMarkers();
     }
@@ -106,12 +99,9 @@ Hooks.on('deleteCombat', async () => {
 });
 
 Hooks.on('updateToken', (scene, updateToken, updateData) => {
-    if(verbose){console.log('updateToken')}
-    console.log(animator, markerId, lastTurn, verbose)
-
     let tile = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
     if (tile) {
-        if ((updateData.x || updateData.y || updateData.width || updateData.height || updateData.hidden) &&
+        if ((updateData.x || updateData.y || updateData.width || updateData.height || updateData.hidden|| !updateData.hidden) &&
             (game && game.combat && game.combat.combatant && game.combat.combatant.tokenId == updateToken._id) &&
             game.user.isGM && game.combat) {
             Marker.moveMarkerToToken(updateToken._id, tile.id);
@@ -122,9 +112,6 @@ Hooks.on('updateToken', (scene, updateToken, updateData) => {
 });
 
 Hooks.on('updateTile', () => {
-    if(verbose){console.log('updateTile')}
-    console.log(animator, markerId, lastTurn, verbose)
-
     if (canvas.scene.data.tokenVision) {
         let tile = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
         if (tile) {
@@ -136,9 +123,13 @@ Hooks.on('updateTile', () => {
     }
 });
 
+Hooks.on('deleteTile', () => {
+    MarkerAnimation.stopAnimation(animator);
+    markerId = undefined
+});
+
 Hooks.on('pauseGame', async (isPaused) => {
     if(verbose){console.log('pauseGame')}
-    console.log(animator, markerId, lastTurn, verbose)
 
     if (markerId && Settings.getShouldAnimate()) {
         if (isPaused) {
