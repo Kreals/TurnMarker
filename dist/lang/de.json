@@ -26,10 +26,10 @@
 				"name": "Animationsgeschwindigkeit",
 				"hint": "Wie schnell soll die Animation rotieren, falls die Animation eingeschaltet ist (Empfohlen wird zwischen 10 und 200)"
 			},
-			"tmimage": {
+			"tmimageselector": {
 				"name": "Bild für die Markierung"
 			},
-			"customTMImage": {
+			"tmcustomimagepath": {
 				"name": "Benutzerdefiniertes Bild",
 				"hint": "Verwende ein eigenes Bild für die Markierung (Leer lassen, um eins der ausgelieferten Bilder zu verwenden)"
 			},
@@ -45,7 +45,7 @@
 				"name": "Aktiviere Markierung Zugbeginn",
 				"hint": "Wenn dies eingeschaltet ist, wird eine Markierung an die Stelle gesetzt, an der das Token seinen Zug begonnen hat"
 			},
-			"customSMImage": {
+			"smcustomimagepath": {
 				"name": "Benutzerdefiniertes Bild",
 				"hint": "Verwende ein eigenes Bild für die Zugbeginn-Markierung (Leer lassen, um eins der ausgelieferten Bilder zu verwenden)"
 			}

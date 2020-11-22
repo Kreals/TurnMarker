@@ -29,10 +29,10 @@
                 "name": "Animation Speed",
                 "hint": "How fast to animate the rotation if enabled (recommended between 10 and 200)"
             },
-            "tmimage": {
+            "tmimageselector": {
                 "name": "Marker Image"
             },
-            "customTMImage": {
+            "tmcustomimagepath": {
                 "name": "Custom Image Path",
                 "hint": "Use a custom image instead (leave blank to use a built in image)"
             },
@@ -48,7 +48,7 @@
                 "name": "Enable Start Marker",
                 "hint": "If enabled, will place a marker at the location a token started its turn"
             },
-            "customSMImage": {
+            "smcustomimagepath": {
                 "name": "Custom Image Path",
                 "hint": "Use a custom image for the start marker (leave blank to use the built in image)"
             }
