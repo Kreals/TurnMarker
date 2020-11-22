@@ -1,3 +1,6 @@
+# 2.6.24
+- Fixed some variable mismatches in the settings variable
+
 # 2.6.23
 - Major code refactor: removed redundent hook calls and simplified logic for simpler debugging and maintenance 
 - Fixed issue where start marker would create duplicates
