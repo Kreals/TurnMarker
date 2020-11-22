@@ -1,4 +1,14 @@
-# 2.6.21
+# 2.6.23
+- Major code refactor: removed redundent hook calls and simplified logic for simpler debugging and maintenance 
+- Fixed issue where start marker would create duplicates
+- Made both the start marker and the turn marker both reflect the tokens hidden status
+- Fixed the custom start marker so it now actually works
+- Removed video preview, unsure what it was for.
+- Added start marker preview window in settings
+- Added functionality that applies settings immediately when saved (GM only)
+- Fixed the settings screen and made some minor text changes
+
+# 2.6.22
 - Fixed an issue where marker tile wouldn't re-appear if the token visibility was toggeled back on during it's turn
 
 # 2.6.21

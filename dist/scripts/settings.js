@@ -9,11 +9,11 @@ const interval = 'interval';
 const announce = 'announce-turn';
 const announceAsActor = 'announce-asActor';
 const announceImage = 'announce-image';
-const image = 'image';
-const customimage = 'customimage';
+const tmimageselector = 'tmimageselector';
+const tmcustomimagepath = 'tmcustomimagepath';
+const smcustomimagepath = 'smcustomimagepath';
 const turnMarkerEnabled = 'turnmarker-enabled';
 const startMarkerEnabled = 'startMarker-enabled';
-const startMarkerImage = 'startMarker-custom';
 export const imageTitles = [
     'Runes of Incendium by Rin',
     'Runes of the Cultist by Rin',
@@ -63,11 +63,19 @@ export class Settings {
         return game.settings.get(modName, animation);
     }
 
+    static setShouldAnimate(val) {
+        return game.settings.set(modName, animation, val);
+    }
+
     /**
      * Gets the animation interval in ms.
      */
     static getInterval() {
         return game.settings.get(modName, interval);
+    }
+
+    static setInterval(val) {
+        game.settings.set(modName, interval, val);
     }
 
     /**
@@ -93,19 +101,12 @@ export class Settings {
         game.settings.set(modName, announceImage, val);
     }
 
-    /**
-     * Gets the index of the currently selected marker image
-     */
-    static getImageIndex() {
-        return game.settings.get(modName, image);
+    static setImageIndex(val) {
+        return game.settings.set(modName, tmimageselector, val);
     }
 
-    static getStartMarker() {
-        if (game.settings.get(modName, startMarkerImage).trim() == '') {
-            return 'modules/turnmarker/assets/start.png';
-        } else {
-            return game.settings.get(modName, startMarkerImage);
-        }
+    static getImageIndex() {
+        return game.settings.get(modName, tmimageselector);
     }
 
     static getTurnMarkerEnabled() {
@@ -125,22 +126,38 @@ export class Settings {
         game.settings.set(modName, startMarkerEnabled, val);
     }
 
-    static getStartMarkerPath() {
-        return game.settings.get(modName, startMarkerImage);
+    static getCustomTMImagePath() {
+        return game.settings.get(modName, tmcustomimagepath);
     }
 
-    static setStartMarkerPath(val) {
-        game.settings.set(modName, startMarkerImage, val);
+    static getCustomSMImagePath() {
+        return game.settings.get(modName, smcustomimagepath);
     }
 
-    /**
-     * Gets a path to the currently selected image to be used as the marker
-     */
-    static getImagePath() {
-        if (game.settings.get(modName, customimage).trim() == '') {
-            return this.getImageByIndex(game.settings.get(modName, image));
-        } else {
-            return game.settings.get(modName, customimage);
+    static setCustomTMImagePath(val) {
+        game.settings.set(modName, tmcustomimagepath, val);
+    }
+
+    static setCustomSMImagePath(val) {
+        game.settings.set(modName, smcustomimagepath, val);
+    }
+
+
+    static getChoosenTMImagePath() {
+       let cpath = game.settings.get(modName, tmcustomimagepath);
+       if (cpath == ""){
+        return this.getImageByIndex(this.getImageIndex())
+        }else{
+            return cpath
+        }
+    }
+
+    static getChoosenSMImagePath() {
+        let cpath = game.settings.get(modName, smcustomimagepath);
+        if (cpath == ""){
+            return "modules/turnmarker/assets/start.png"
+        }else{
+            return cpath
         }
     }
 
@@ -160,17 +177,6 @@ export class Settings {
         }
     }
 
-    static setImage(val) {
-        game.settings.set(modName, image, val);
-    }
-
-    static getCustomImagePath() {
-        return game.settings.get(modName, customimage);
-    }
-
-    static setCustomImagePath(val) {
-        game.settings.set(modName, customimage, val);
-    }
 
     /**
      * Registers all game settings
@@ -205,8 +211,8 @@ export class Settings {
         game.settings.register(modName, animation, {
             name: 'tm.settings.animate.name',
             hint: 'tm.settings.animate.hint',
-            scope: 'user',
-            config: true,
+            scope: 'world',
+            config: false,
             type: Boolean,
             default: true,
         });
@@ -214,32 +220,40 @@ export class Settings {
         game.settings.register(modName, interval, {
             name: 'tm.settings.interval.name',
             hint: 'tm.settings.interval.hint',
-            scope: 'user',
-            config: true,
+            scope: 'world',
+            config: false,
             type: Number,
             default: 100
         });
 
-        game.settings.register(modName, image, {
-            name: 'tm.settings.image.name',
+        game.settings.register(modName, tmimageselector, {
+            name: 'tm.settings.tmimageselector.name',
             scope: 'world',
             config: false,
             type: Number,
             default: 0,
             choices: imageTitles,
-            restricted: true,
-            onChange: value => Marker.updateImagePath(value)
+            restricted: true
         });
 
-        game.settings.register(modName, customimage, {
-            name: 'tm.settings.customImage.name',
-            hint: 'tm.settings.customImage.hint',
+        game.settings.register(modName, tmcustomimagepath, {
+            name: 'tm.settings.tmcustomimagepath.name',
+            hint: 'tm.settings.tmcustomimagepath.hint',
             scope: 'world',
             config: false,
             type: String,
             default: '',
-            restricted: true,
-            onChange: value => Marker.updateImagePath(value)
+            restricted: true
+        });
+
+        game.settings.register(modName, smcustomimagepath, {
+            name: 'tm.settings.smcustomimagepath.name',
+            hint: 'tm.settings.smcustomimagepath.hint',
+            scope: 'world',
+            config: false,
+            type: String,
+            default: '',
+            restricted: true
         });
 
         game.settings.register(modName, announce, {
@@ -286,16 +300,6 @@ export class Settings {
             config: false,
             type: Boolean,
             default: false,
-            restricted: true
-        });
-
-        game.settings.register(modName, startMarkerImage, {
-            name: 'tm.settings.startImage.name',
-            hint: 'tm.settings.startImage.hint',
-            scope: 'world',
-            config: false,
-            type: String,
-            default: '',
             restricted: true
         });
     }

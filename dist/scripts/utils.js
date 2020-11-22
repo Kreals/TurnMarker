@@ -7,8 +7,10 @@ export const modName = 'turnmarker';
 /*** Flag Info */
 export const FlagScope = 'turnmarker';
 export const Flags = {
-    startMarkerPlaced: 'startMarkerPlaced'
+    //startMarkerPlaced: 'startMarkerPlaced'
 };
+// canvas.scene.unsetFlag(FlagScope, Flags.startMarkerPlaced); //how to use module flags
+
 
 /** Socket Info */
 export const socketName = 'module.turnmarker';

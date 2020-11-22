@@ -26,13 +26,16 @@ export class SettingsForm extends FormApplication {
         return {
             turnMarkerEnabled: Settings.getTurnMarkerEnabled(),
             ratio: Settings.getRatio(),
-            image: this.getSelectList(imageTitles, Settings.getImageIndex()),
-            customImage: Settings.getCustomImagePath(),
+            tmimageselector: this.getSelectList(imageTitles, Settings.getImageIndex()),
+            tmPreviewPath: Settings.getChoosenTMImagePath(),
+            smPreviewPath: Settings.getChoosenSMImagePath(),
+            tmcustomimagepath: Settings.getCustomTMImagePath(),
+            smcustomimagepath: Settings.getCustomSMImagePath(),
             announce: Settings.shouldAnnounceTurns(),
             announceImage: Settings.getIncludeAnnounceImage(),
             startMarkerEnabled: Settings.getStartMarkerEnabled(),
-            startMarkerPath: Settings.getStartMarkerPath(),
-            previewPath: Settings.getImagePath()
+            animate: Settings.getShouldAnimate(),
+            interval: Settings.getInterval()
         };
     }
 
@@ -44,64 +47,64 @@ export class SettingsForm extends FormApplication {
     async _updateObject(e, d) {
         console.log('Turn Marker | Saving Settings');
         Settings.setRatio(d.ratio);
-        if (d.image) Settings.setImage(d.image);
-        Settings.setCustomImagePath(d.customImage);
+        Settings.setImageIndex(Number(d.tmimageselector));
+        Settings.setCustomTMImagePath(d.tmcustomimagepath);
+        Settings.setCustomSMImagePath(d.smcustomimagepath);
         Settings.setShouldAnnounceTurns(d.announce);
         Settings.setIncludeAnnounceImage(d.announceImage);
         Settings.setTurnMarkerEnabled(d.turnMarkerEnabled);
         Settings.setStartMarkerEnabled(d.startMarkerEnabled);
-        Settings.setStartMarkerPath(d.startMarkerPath);
+        Settings.setShouldAnimate(d.animate);
+        Settings.setInterval(d.interval);
+
+        if (d.smcustomimagepath == ""){
+            d['smimg'] = "modules/turnmarker/assets/start.png"
+        }else{
+            d['smimg'] = d.smcustomimagepath
+        }
+        if (d.tmcustomimagepath == ""){
+            d['tmimg'] = Settings.getImageByIndex(Number(d.tmimageselector))
+        }else{
+            d['tmimg'] = d.tmcustomimagepath
+        }
+        Hooks.call('tmSettingsChanged', d)
     }
 
     activateListeners(html) {
         super.activateListeners(html);
-        const markerSelect = html.find('#image');
-        const customImage = html.find('#customImage');
-        const markerImgPreview = html.find('#markerImgPreview');
+        const markerSelect = html.find('#tmimageselector');
+        const customTMImage = html.find('#tmcustomimagepath');
+        const customSMImage = html.find('#smcustomimagepath');
+        const tmImgPreview = html.find('#tmImgPreview');
+        const smImgPreview = html.find('#smImgPreview');
 
-        this.updatePreview(html);
+        //this.updatePreview(html);
 
-        if (markerSelect.length > 0) {
-            markerSelect.on('change', event => {
-                if (customImage[0].value.trim() == '') {
-                    markerImgPreview.attr('src', Settings.getImageByIndex(Number(event.target.value)));
-                }
-            });
-        }
-
-        if (customImage.length > 0) {
-            customImage.on('change', event => {
-                this.updatePreview(html);
-            });
-        }
-    }
-
-    updatePreview(html) {
-        const markerSelect = html.find('#image');
-        const customImage = html.find('#customImage');
-        const markerImgPreview = html.find('#markerImgPreview');
-        const markerVideoPreview = html.find('#markerVideoPreview');
-
-        if (customImage[0].value.trim() == '') {
-            markerSelect[0].disabled = false;
-            markerImgPreview.attr('src', Settings.getImageByIndex(Number(markerSelect[0].value)));
-            markerImgPreview.removeClass('hidden');
-            markerVideoPreview.addClass('hidden');
-        } else {
-            markerSelect[0].disabled = true;
-            const ext = this.getExtension(customImage[0].value);
-            console.warn(ext);
-            if (videos.includes(ext.toLowerCase())) {
-                markerVideoPreview.attr('src', customImage[0].value);
-                markerImgPreview.addClass('hidden');
-                markerVideoPreview.removeClass('hidden');
-            } else {
-                markerImgPreview.attr('src', customImage[0].value);
-                markerImgPreview.removeClass('hidden');
-                markerVideoPreview.addClass('hidden');
+        markerSelect.on('change', event => {
+            if (customTMImage[0].value.trim() == '') {
+                tmImgPreview.attr('src', Settings.getImageByIndex(Number(event.target.value)));
             }
-        }
+        });
+
+        customTMImage.on('change', event => {
+            if (!customTMImage[0].value.trim() == '') {
+                markerSelect[0].disabled = true;
+                tmImgPreview.attr('src', customTMImage[0].value);
+            }else {
+                markerSelect[0].disabled = false;
+                tmImgPreview.attr('src', Settings.getImageByIndex(Number(event.target.value)));
+            }
+        });
+
+        customSMImage.on('change', event => {
+            if (!customSMImage[0].value.trim() == '') {
+                smImgPreview.attr('src', customSMImage[0].value);
+            }else{
+                smImgPreview.attr('src', "modules/turnmarker/assets/start.png");
+            }
+        });
     }
+
 
     getExtension(filePath) {
         return filePath.slice((filePath.lastIndexOf(".") - 1 >>> 0) + 2);

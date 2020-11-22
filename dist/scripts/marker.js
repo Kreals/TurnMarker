@@ -1,111 +1,239 @@
 import { MarkerAnimation } from './markeranimation.js';
 import { Settings } from './settings.js';
+import { SettingsForm } from './settingsForm.js';
 import { findTokenById, Flags, FlagScope, socketAction, socketName } from './utils.js';
 
 /**
  * Provides functionality for creating, moving, and animating the turn marker
  */
 export class Marker {
+    /**
+     * Handle turn marker when foundry first loads
+     */
+    static async initTurnMarker(animation) {
+        console.log('initTurnMarker')
+        let tmarker = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
+        if (tmarker){
+            if (Settings.getTurnMarkerEnabled()){
+                if (Settings.getShouldAnimate()){
+                    animation = MarkerAnimation.start(tmarker)
+                }
+            }else{
+                this.hideTurnMarker()
+            }
+        }else{
+            if(Object.keys(game.combats).length > 0) {
+                let combat1 = game.combats.values().next().value
+                let token = findTokenById(combat1.current.tokenId);
+                if (token){
+                    let result = await this.createTurnMarker(token);
+                    tmarker = result[0]
+                    animation = result[1]
+                }
+            }
+        }
+        return animation
+    }
 
     /**
      * Places a new turn marker under the token specified, and if required, starts the animation
-     * @param {String} tokenId - The ID of the token where the marker should be placed
-     * @param {Object} animator - The animator object
-     * @param {String} markerId - The ID of the tile being used as the turn marker
      */
-    static async placeTurnMarker(tokenId, markerId) {
-        if (!markerId) {
-            this.clearAllMarkers();
-
-            if (Settings.getTurnMarkerEnabled()) {
-                let token = findTokenById(tokenId);
-                let ratio = Settings.getRatio();
-                let dims = this.getImageDimensions(token);
-                let center = this.getImageLocation(token);
-
-                let newTile = new Tile({
-                    img: Settings.getImagePath(),
-                    width: dims.w,
-                    height: dims.h,
-                    x: center.x,
-                    y: center.y,
-                    z: 900,
-                    rotation: 0,
-                    hidden: token.data.hidden,
-                    locked: false,
-                    flags: { turnMarker: true }
-                });
-
-                let tile = await canvas.scene.createEmbeddedEntity('Tile', newTile.data);
-
-                return tile._id;
-            } else {
-                return null;
-            }
-        } else {
-            this.moveMarkerToToken(tokenId, markerId);
-            return markerId;
-        }
-    }
-
-    /**
-     * Deletes any tiles flagged as a 'Start Marker' from the canvas
-     */
-    static async deleteStartMarker() {
-        for (var tile of canvas.scene.getEmbeddedCollection('Tile')) {
-            if (tile.flags.startMarker) {
-                await canvas.scene.deleteEmbeddedEntity('Tile', tile._id);
-            }
-        }
-    }
-
-    /**
-     * If enabled in settings, place a "start" marker under the token where their turn started.
-     * @param {String} tokenId - The ID of the token to place the start marker under
-     */
-    static async placeStartMarker(tokenId) {
-        if (Settings.getStartMarkerEnabled()) {
-            let token = findTokenById(tokenId);
+    static async createTurnMarker(token=false) {
+        console.log('createTurnMarker')
+        let w, h, x, y
+        if (token){
             let dims = this.getImageDimensions(token);
             let center = this.getImageLocation(token);
-            let newTile = new Tile({
-                img: Settings.getStartMarker(),
-                width: dims.w,
-                height: dims.h,
-                x: center.x,
-                y: center.y,
-                z: 900,
-                rotation: 0,
-                hidden: token.data.hidden,
-                locked: false,
-                flags: { startMarker: true }
-            });
-
-            if (game.user.isGM) {
-                canvas.scene.createEmbeddedEntity('Tile', newTile.data);
-                canvas.scene.setFlag(FlagScope, Flags.startMarkerPlaced, true);
-            } else {
-                game.socket.emit(socketName, {
-                    mode: socketAction.placeStartMarker,
-                    tileData: newTile.data
-                });
-            }
-        }
+            w = dims.w, h = dims.h, x = center.x, y = center.y
+        }else{ w = 0, h = 0, x = 0, y = 0}
+        let newTile = new Tile({
+            img: Settings.getChoosenTMImagePath(),
+            width: w,
+            height: h,
+            x: x,
+            y: y,
+            z: 900,
+            rotation: 0,
+            hidden: false,
+            locked: false,
+            flags: { turnMarker: true }
+        });
+        let tmarker = await canvas.scene.createEmbeddedEntity('Tile', newTile.data)
+        return [tmarker,
+                MarkerAnimation.start(newTile)]
     }
 
     /**
-     * Moves the turn marker tile under the specified token
+     * Moves the specified marker tile under the specified token
      * @param {String} tokenId - The ID of the token that the marker should be placed under
      * @param {String} markerId - The ID of the tile currently serving as the turn marker
      */
-    static async moveMarkerToToken(tokenId, markerId) {
+    static async moveTMToToken(tokenId) {
+        console.log('moveTMToToken')
         let token = findTokenById(tokenId);
-        let ratio = Settings.getRatio();
         let dims = this.getImageDimensions(token);
         let center = this.getImageLocation(token);
+        let marker = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
 
         await canvas.scene.updateEmbeddedEntity('Tile', {
-            _id: markerId,
+            _id: marker.data._id,
+            width: dims.w,
+            height: dims.h,
+            x: center.x,
+            y: center.y,
+            hidden: token.data.hidden
+        });
+    }
+
+
+    static async tMCombatUpdate(tokenId, animation) {
+        console.log('tMCombatUpdate')
+        if (Settings.getTurnMarkerEnabled()) {
+            let tmarker= canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
+            if (!tmarker){
+                let result = await this.createTurnMarker(tokenId);
+                console.log(result)
+                tmarker = result[0]
+                animation = result[1]
+            }
+            await this.moveTMToToken(tokenId);
+        }
+        return animation
+    }
+
+
+    static async tMTokenUpdate(updateToken) {
+        console.log('tMTokenUpdate')
+        if (Settings.getTurnMarkerEnabled()) {
+            let tmarker= canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
+            this.moveTMToToken(updateToken._id);
+            tmarker.zIndex = Math.max(...canvas.tiles.placeables.map(o => o.zIndex)) + 1;
+            tmarker.parent.sortChildren();
+        }
+    }
+
+    /**
+     * Hides the Turn Marker by shrinking it's dimensions
+     */
+    static async hideTurnMarker() {
+        console.log('hideTurnMarker')
+        let marker = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
+        await canvas.scene.updateEmbeddedEntity('Tile', {
+            _id: marker.data._id, 
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0
+        });
+    }
+
+
+    /**
+     * Handle Start marker when foundry first loads
+     */
+    static async initStartMarker() {
+        console.log('initStartMarker')
+        let smarker = canvas.tiles.placeables.find(t => t.data.flags.startMarker == true);
+        if (smarker){
+            if (!Settings.getStartMarkerEnabled()){
+                this.hideStartMarker()
+            }
+        }else{
+            if(Object.keys(game.combats).length > 0) {
+                let combat1 = game.combats.values().next().value
+                let token = findTokenById(combat1.current.tokenId);
+                if (token){
+                    smarker = await this.createStartMarker(token)
+                }
+            }
+        }
+        console.log(smarker)
+    }
+
+
+    static async sMCombatUpdate(tokenId) {
+        console.log('sMCombatUpdate')
+        if (Settings.getStartMarkerEnabled()) {
+            let smarker= canvas.tiles.placeables.find(t => t.data.flags.startMarker == true);
+            if (!smarker){
+                let result = await this.createStartMarker(token);
+                smarker = result[0]
+            }
+            console.log('sdfsdfsdf')
+            await this.moveSMToToken(tokenId);
+        }
+    }
+
+
+    static async sMTokenUpdate(updateToken) {
+        console.log('sMTokenUpdate')
+        if (Settings.getStartMarkerEnabled()) {
+            let smarker = canvas.tiles.placeables.find(t => t.data.flags.startMarker == true);
+            await canvas.scene.updateEmbeddedEntity('Tile', {
+                _id: smarker.data._id,
+                hidden: updateToken.hidden
+            });
+        }
+    }
+
+    /**
+     * Places a new start marker under the token specified, and if required, starts the animation
+     * @param {String} tokenId - The ID of the token where the marker should be placed
+     */
+    static async createStartMarker(token=false) {
+        console.log('createStartMarker')
+        let w, h, x, y
+        if (token){
+            let dims = this.getImageDimensions(token, 1.5);
+            let center = this.getImageLocation(token, 1.5);
+            w = dims.w, h = dims.h, x = center.x, y = center.y
+        }else{ w = 0, h = 0, x = 0, y = 0}
+
+        let newTile = new Tile({
+            img: Settings.getChoosenSMImagePath(),
+            width: w,
+            height: h,
+            x: x,
+            y: y,
+            z: 900,
+            rotation: 0,
+            hidden: false,
+            locked: false,
+            flags: { startMarker: true }
+        });
+
+        let smarker =  await canvas.scene.createEmbeddedEntity('Tile', newTile.data);
+        return [smarker];
+    }
+
+    /**
+     * Hides the Start Marker by shrinking it's dimensions
+     */
+    static async hideStartMarker() {
+        console.log('hideStartMarker')
+        let marker = canvas.tiles.placeables.find(t => t.data.flags.startMarker == true);
+        await canvas.scene.updateEmbeddedEntity('Tile', {
+            _id: marker.data._id, 
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0
+        });
+    }
+
+    /**
+     * Moves the specified marker tile under the specified token
+     * @param {String} tokenId - The ID of the token that the marker should be placed under
+     */
+    static async moveSMToToken(tokenId) {
+        console.log('moveSMToToken')
+        let token = findTokenById(tokenId);
+        let dims = this.getImageDimensions(token, 1.5);
+        let center = this.getImageLocation(token, 1.5);
+        let smarker = canvas.tiles.placeables.find(t => t.data.flags.startMarker == true);
+        console.log(dims.w, dims.h,center.x, center.y)
+        await canvas.scene.updateEmbeddedEntity('Tile', {
+            _id: smarker.data._id,
             width: dims.w,
             height: dims.h,
             x: center.x,
@@ -115,48 +243,60 @@ export class Marker {
     }
 
     /**
-     * Removes any existing turn marker and start marker tiles from the canvas
+     * Updates the start markers tile's image when the image path has changed
      */
-    static async clearAllMarkers() {
-        let tiles = canvas.scene.getEmbeddedCollection('Tile');
-
-        for (var tile of tiles) {
-            if (tile.flags.turnMarker || tile.flags.startMarker) {
-                await canvas.scene.deleteEmbeddedEntity('Tile', tile._id);
-            }
-        }
-    }
-
-    /**
-     * Updates the tile image when the image path has changed
-     */
-    static updateImagePath() {
-        if (game.user.isGM) {
-            let tile = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
+    static async updateSM(data) {
+        console.log('updateSM')
+        if (game.user.isGM && Object.keys(game.combats).length > 0) {
+            let tile = canvas.tiles.placeables.find(t => t.data.flags.startMarker == true);
             if (tile) {
-                canvas.scene.updateEmbeddedEntity('Tile', {
+                await canvas.scene.updateEmbeddedEntity('Tile', {
                     _id: tile.id,
-                    img: Settings.getImagePath()
+                    img: data.smimg,
+                    z: 901
                 });
             }
         }
     }
 
-    /**
-     * Completely resets the turn marker - deletes all tiles and stops any animation
-     * @param {Object} animator - The animator object
-     */
-    static reset(animator) {
-        MarkerAnimation.stopAnimation(animator);
-        this.clearAllMarkers();
+
+    static async updateTM(data) {
+        console.log('updateTM')
+        if (game.user.isGM && Object.keys(game.combats).length > 0) {
+            let combat1 = game.combats.values().next().value
+            let token = findTokenById(combat1.current.tokenId);
+            console.log(data)
+            if (token){
+                let dims = this.getImageDimensions(token, Number(data.ratio));
+                let center = this.getImageLocation(token, Number(data.ratio));
+                let tile = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
+                console.log(data)
+                if (tile) {
+                    await canvas.scene.updateEmbeddedEntity('Tile', {
+                        _id: tile.id,
+                        img: data.tmimg,
+                        width: dims.w,
+                        height: dims.h,
+                        x: center.x,
+                        y: center.y,
+                        z: 900
+                    });
+                }
+            }
+        }
     }
 
     /**
      * Gets the proper dimensions of the marker tile taking into account the current grid layout
      * @param {object} token - The token that the tile should be placed under
      */
-    static getImageDimensions(token, ignoreRatio = false) {
-        let ratio = ignoreRatio ? 1 : Settings.getRatio();
+    static getImageDimensions(token, ratio_overide=-1) {
+        let ratio;
+        if (ratio_overide > -1){
+            ratio = ratio_overide
+        }else{
+            ratio = Settings.getRatio();
+        }
         let newWidth = 0;
         let newHeight = 0;
 
@@ -180,8 +320,13 @@ export class Marker {
      * Gets the proper location of the marker tile taking into account the current grid layout
      * @param {object} token - The token that the tile should be placed under
      */
-    static getImageLocation(token, ignoreRatio = false) {
-        let ratio = ignoreRatio ? 1 : Settings.getRatio();
+    static getImageLocation(token, ratio_overide=-1) {
+        let ratio;
+        if (ratio_overide > -1){
+            ratio = ratio_overide
+        }else{
+            ratio = Settings.getRatio();
+        }
         let newX = 0;
         let newY = 0;
 
