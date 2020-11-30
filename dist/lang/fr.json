@@ -1,0 +1,57 @@
+{
+    "tm": {
+        "settings": {
+            "button": {
+                "name": "Paramètres golbales de Turn Maker",
+                "label": "Paramètres Globales"
+            },
+            "formTitles": {
+                "settings": "Turn Marker - Paramètres Globales"
+            },
+            "formHeaders": {
+                "imageOptions": "Options du Marqueur Image",
+                "turnAnnounce": "Annonceur de Tour",
+                "startMarker": "Marqueur de départ",
+                "save": "Enrigistrer Modifications"
+            },
+            "turnMarkerEnabled": {
+                "name": "Activer Turn Maker"
+            },
+            "ratio": {
+                "name": "Ratio de l'image",
+                "hint": "Comparé à la grosseur du token."
+            },
+            "animate": {
+                "name": "Animer le marqueur?",;
+                "hint": "Utiliser l'animation de rotation sur le Marqueur. (les changements peuvent être visibles seulement dès le prochain combat)"
+            },
+            "interval": {
+                "name": "Vitesse de l'Animation",
+                "hint": "Modifier la vitesse de l'animation si activée (recommandé entre 10 et 200)"
+            },
+            "tmimageselector": {
+                "name": "Image du Marqueur"
+            },
+            "tmcustomimagepath": {
+                "name": "Emplacement du fichier",
+                "hint": "Utiliser une image personnalisée (Laissez vide pour utiliser celle par défaut)"
+            },
+            "announce": {
+                "name": "Annonceur de Tours",
+                "hint": "Si activé, va envoyer un message dans le chat pour le combattant"
+            },
+            "announceImage": {
+                "name": "Inclure l'image du Token dans le chat",
+                "hint": "Si activé, va inclure l'image du token du joueur dans le chat"
+            },
+            "startEnabled": {
+                "name": "Activer le Marqueur de départ",
+                "hint": "Si activé, va placer un marqueur sur le token qui a commencé son tour"
+            },
+            "smcustomimagepath": {
+                "name": "Emplacement image personnalisée",
+                "hint": "Utiliser une image personnalisée pour le Marquer (Laissez vide pour utiliser celle par défaut)"
+            }
+        }
+    }
+}
