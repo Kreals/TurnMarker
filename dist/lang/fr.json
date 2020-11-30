@@ -22,7 +22,7 @@
                 "hint": "Comparé à la grosseur du token."
             },
             "animate": {
-                "name": "Animer le marqueur?",;
+                "name": "Animer le marqueur?",
                 "hint": "Utiliser l'animation de rotation sur le Marqueur. (les changements peuvent être visibles seulement dès le prochain combat)"
             },
             "interval": {
