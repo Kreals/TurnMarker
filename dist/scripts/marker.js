@@ -38,12 +38,14 @@ export class Marker {
     /**
      * Places a new turn marker under the token specified, and if required, starts the animation
      */
-    static async createTurnMarker(token=false) {
+    static async createTurnMarker(tokenId=false) {
         console.log('createTurnMarker')
         let w, h, x, y
+        let token = findTokenById(tokenId);
         if (token){
-            let dims = this.getImageDimensions(token);
-            let center = this.getImageLocation(token);
+            console.log('boop', token)
+            let dims = this.getImageDimensions(token, Settings.getRatio());
+            let center = this.getImageLocation(token, 1.5);
             w = dims.w, h = dims.h, x = center.x, y = center.y
         }else{ w = 0, h = 0, x = 0, y = 0}
         let newTile = new Tile({
@@ -180,9 +182,10 @@ export class Marker {
      * Places a new start marker under the token specified, and if required, starts the animation
      * @param {String} tokenId - The ID of the token where the marker should be placed
      */
-    static async createStartMarker(token=false) {
+    static async createStartMarker(tokenId=false) {
         console.log('createStartMarker')
         let w, h, x, y
+        let token = findTokenById(tokenId);
         if (token){
             let dims = this.getImageDimensions(token, 1.5);
             let center = this.getImageLocation(token, 1.5);
@@ -329,7 +332,7 @@ export class Marker {
         }
         let newX = 0;
         let newY = 0;
-
+        console.log(token)
         switch (canvas.grid.type) {
             case 2: case 3: // Hex Rows
                 newX = token.center.x - ((token.h * ratio) / 2);
