@@ -1,3 +1,11 @@
+# 2.6.30
+- Fixed a duplicate setting in the settings window
+- Added human translated french localization to settings
+- Added google translate language localizations for the turn announcements (en, fr, de, jp, ko)
+- Fixed an issue with multipl markers showing at the same time
+- Fixed an issue where settings would not apply properly
+- General refactoring and similar stability fixes
+
 # 2.6.24
 - Fixed some variable mismatches in the settings variable
 
