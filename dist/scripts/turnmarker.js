@@ -1,27 +1,33 @@
 import { Chatter } from './chatter.js';
-import { Marker } from './marker.js';
+import { TurnMarker } from './tmmarker.js';
+import { StartMarker } from './smmarker.js';
 import { MarkerAnimation } from './markeranimation.js';
 import { Settings } from './settings.js';
 import { renderUpdateWindow } from './updateWindow.js';
-import { firstGM, Flags, FlagScope, socketAction, socketName } from './utils.js';
+import { findTokenById, firstGM, Flags, FlagScope, socketAction, socketName } from './utils.js';
 
-let animation;
 let lastTokenId = '';
-
+let animation;
 CONFIG.debug.hooks = false
 
 /*  issues
     marker image duplicates when settings are changed and combat is active
     custom start marker doesnt work?
-    system doesnt handle multiple combats properly
+    system doesnt handle multiple combats within the same scene properly
+    changing turnmarker template causes animation to speed up 
+    changing settings only affects current combat and scene
 */
 
-Hooks.on('ready', async () => {
+Hooks.on('init', async () => {
     Settings.registerSettings();
 
-    animation = await Marker.initTurnMarker()
-    Marker.initStartMarker()
+})
 
+Hooks.on('ready', async () => {
+    console.log('ready');
+    await TurnMarker.init()
+    StartMarker.init()
+    animation = MarkerAnimation.init()
     if (game.user.isGM) {
         if (isNewerVersion(game.modules.get("turnmarker").data.version, Settings.getVersion())) {
             renderUpdateWindow();
@@ -30,35 +36,37 @@ Hooks.on('ready', async () => {
 });
 
 Hooks.on('tmSettingsChanged', async (d) => {
-    console.log('stuff', d);
-    Marker.updateSM(d);
-    Marker.updateTM(d);
-
-    console.log(animation)
+    console.log('tmSettingsChanged', d);
+    await TurnMarker.init()
+    StartMarker.init()
+    game.combats.forEach(combat => {
+        if (combat.scene.id === canvas.scene.id && combat.data.active){
+            TurnMarker.update(d, combat.current.tokenId);
+            StartMarker.update(d);
+        }
+    })
     if (d.animate){
-        console.log(true)
-        //if (!animation){
-        animation = await MarkerAnimation.start();
-        //}
+        await MarkerAnimation.start(animation);
     }else{
-        console.log(false)
-        MarkerAnimation.stop(animation);
+        MarkerAnimation.stop(animation); 
     }
+  
 
 });
 
 Hooks.on('updateCombat', async (combat, update) => {
+    console.log('updateCombat')
     if (combat && combat.combatant && update &&  game.user.isGM && game.userId == firstGM()) {
         if (combat.combatant.token) { //if combantant has a token 
             lastTokenId = combat.combatant._id;
-            animation = await Marker.tMCombatUpdate(combat.combatant.token._id, animation)
-            Marker.sMCombatUpdate(combat.combatant.token._id)
+            await TurnMarker.combatUpdate(combat.combatant.token._id)
+            StartMarker.combatUpdate(combat.combatant.token._id)
             if (Settings.shouldAnnounceTurns() && !combat.combatant.token.hidden && !combat.combatant.hidden) {
                 Chatter.sendTurnMessage(combat.combatant);
             }
         }else{ // just hide everything
-            Marker.hideTurnMarker();
-            Marker.hideStartMarker();
+            TurnMarker.hide();
+            StartMarker.hide();
             if (Settings.shouldAnnounceTurns() && !combat.combatant.hidden) {
                 Chatter.sendTurnMessage(combat.combatant);
             }
@@ -67,33 +75,29 @@ Hooks.on('updateCombat', async (combat, update) => {
 });
 
 Hooks.on('deleteCombat', async () => {
+    console.log('deleteCombat')
     if (game.user.isGM) {
-        Marker.hideTurnMarker();
-        Marker.hideStartMarker();
+        TurnMarker.hide();
+        StartMarker.hide();
     }
 });
 
 Hooks.on('updateToken', (scene, updateToken, updateData) => {
+    console.log('updateToken')
     if ((updateData.x || updateData.y || updateData.width || updateData.height || updateData.hidden|| !updateData.hidden) &&
-        (game && game.combat && game.combat.combatant && game.combat.combatant.tokenId == updateToken._id) && game.user.isGM && game.combat) {
-        Marker.tMTokenUpdate(updateToken);
-        Marker.sMTokenUpdate(updateToken);
+        (game && game.combat && game.combat.combatant && game.combat.combatant.tokenId == updateToken._id && game.user.isGM)) {
+        TurnMarker.tokenUpdate(updateToken);
+        StartMarker.tokenUpdate(updateToken);
     }
 });
 
-// Hooks.on('updateTile', () => {
-//     if (canvas.scene.data.tokenVision) {
-//         let tile = canvas.tiles.placeables.find(t => t.data.flags.turnMarker == true);
-//         if (tile) {
-//             let combatant = canvas.tokens.placeables.find(x => x.id == game.combat.combatant.tokenId);
-//             if (combatant && !combatant.data.hidden) {
-//                 //tile.visible = canvas.sight.testVisibility(combatant.center, { tolerance: canvas.dimensions.size / 4 });
-//             }
-//         }
-//     }
-// });
+ Hooks.on('canvasReady', async () => {
+    //Settings.registerSettings();
+    await TurnMarker.init()
+    StartMarker.init()
+});
 
 
 Hooks.on('pauseGame', async (isPaused) => {
-    animation = await MarkerAnimation.pauseToggle(isPaused, animation);
+    await MarkerAnimation.pauseToggle(isPaused, animation);
 });

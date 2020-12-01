@@ -48,7 +48,10 @@
 			"smcustomimagepath": {
 				"name": "Benutzerdefiniertes Bild",
 				"hint": "Verwende ein eigenes Bild für die Zugbeginn-Markierung (Leer lassen, um eins der ausgelieferten Bilder zu verwenden)"
-			}
+			},
+			"chatannounce": {
+                "name": "ist an der Reihe"
+            }
 		}
 	}
 }

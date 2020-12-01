@@ -1,4 +1,3 @@
-import { Marker } from './marker.js';
 import { SettingsForm } from './settingsForm.js';
 import { modName } from './utils.js';
 

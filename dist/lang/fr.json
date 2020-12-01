@@ -51,6 +51,9 @@
             "smcustomimagepath": {
                 "name": "Emplacement image personnalisée",
                 "hint": "Utiliser une image personnalisée pour le Marquer (Laissez vide pour utiliser celle par défaut)"
+            },
+			"chatannounce": {
+                "name": "Tour de "
             }
         }
     }

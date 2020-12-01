@@ -2,6 +2,17 @@ import { Settings } from './settings.js';
 
 export class MarkerAnimation {
 
+    /**
+     * Starts the animation loop for the specified tile
+     */
+    static init() {
+        console.log('init animation')
+        let animation = this.animate.bind();
+        if(Settings.getShouldAnimate() && Settings.getTurnMarkerEnabled()) {
+            this.start(animation)
+        }
+        return animation
+    }
 
     /**
      * Handles the animation of the turn marker when the game is paused
@@ -13,9 +24,8 @@ export class MarkerAnimation {
             if (isPaused) {  
                 this.stop(animation);
             } else {
-                animation = this.start(animation);
+                this.start(animation);
             }
-            return animation
         }
     }
 
@@ -23,12 +33,11 @@ export class MarkerAnimation {
      * Starts the animation loop for the specified tile
      * @param {String} tile - The tile currently serving as the turn marker 
      */
-    static start(tile) {
+    static start(animation) {
+        console.log('start animation')
         if (!game.paused) {
-            console.log('starting animation')
-            let animation = this.animate.bind(tile);
+            canvas.app.ticker.remove(animation);
             canvas.app.ticker.add(animation);
-            return animation
         }
     }
 
@@ -37,7 +46,7 @@ export class MarkerAnimation {
      * @param {object} animation - The animator object
      */
     static stop(animation) {
-        console.log('stoppping animation')
+        console.log('stopping animation')
         canvas.app.ticker.remove(animation);
     }
 

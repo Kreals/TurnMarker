@@ -14,7 +14,7 @@ export class Chatter {
             content:
                 `<div class="flexrow">${this.placeImage(combatant)}
                     <div style="flex: 12;">
-                        <h2>${combatant.name}'s Turn</h2>
+                        ` +  this.generateAnnounceString(combatant) + `
                         <p>${players.join(' - ')}</p>
                     </div>
                     </div><em>Turn Marker</em>`
@@ -30,5 +30,22 @@ export class Chatter {
             return `<div style="flex:3;"><img src="${img}" style="border: none;" /></div>`;
             // return `<div style="flex:3;"><video><source="${combatant.img}"></video></div>`;
         } else return '';
+    }
+
+    static generateAnnounceString(combatant){
+        let localisation = game.i18n.lang
+        switch(localisation) {
+            case 'en':
+                return `<h2>${combatant.name} ${game.i18n.localize('tm.settings.chatannounce.name')}</h2>`
+            case 'de':
+                return `<h2>${combatant.name} ${game.i18n.localize('tm.settings.chatannounce.name')}</h2>`
+            case 'fr':
+                return `<h2>${game.i18n.localize('tm.settings.chatannounce.name')} ${combatant.name} </h2>`
+            case 'ja':
+                return `<h2>${combatant.name} ${game.i18n.localize('tm.settings.chatannounce.name')}</h2>`
+            case 'ko':
+                return `<h2>${combatant.name} ${game.i18n.localize('tm.settings.chatannounce.name')}</h2>`
+        }
+
     }
 }
