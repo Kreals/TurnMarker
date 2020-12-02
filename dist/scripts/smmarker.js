@@ -18,7 +18,7 @@ export class StartMarker {
             this.update({smimg: Settings.getChoosenSMImagePath()})
         }else{
             game.combats.forEach(combat => {
-                if (combat.scene.id === canvas.scene.id && combat.data.active){
+                if (combat.scene.id === canvas.scene.id && combat.data.active && combat.current.tokenId){
                     smarkers[0] = this.create(combat.current.tokenId)
                 }
             })

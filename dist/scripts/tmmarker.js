@@ -17,14 +17,14 @@ export class TurnMarker {
         }
         if (tmarkers[0]){
             game.combats.forEach(combat => {
-                if (combat.scene.id === canvas.scene.id && combat.data.active){
+                if (combat.scene.id === canvas.scene.id && combat.data.active && combat.current.tokenId){
                     this.update({tmimg: Settings.getChoosenTMImagePath(), ratio: Settings.getRatio()},
                         combat.current.tokenId)
                 }
             })
         }else{
             game.combats.forEach(combat => {
-                if (combat.scene.id === canvas.scene.id && combat.data.active){
+                if (combat.scene.id === canvas.scene.id && combat.data.active && combat.current.tokenId){
                     tmarkers[0] = this.create(combat.current.tokenId);
                 }
             })
