@@ -5,7 +5,8 @@
 
 
 ## Installation
-It's always better and easier to install modules through the in app browser. Just search for "Turn Marker"
+~~It's always better and easier to install modules through the in app browser. Just search for "Turn Marker"~~
+this fork of the module is not yet in the normal foundry package manager so you will have to install it manually.
 
 To install this module manually:
 1. Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
@@ -52,7 +53,7 @@ Sets the path to an image to be used instead of the included images
 If enabled, a chat message will be sent when the turn in combat changes (unless the combatant is hidden in the combat tracker).
 
 ## Compatibility
-Most recently tested on [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") version 0.5.5 (beta).
+Most recently tested on [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") version 0.7.8.
 
 ## Feedback
 Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/Kreals/TurnMarker/issues "Issue Tracker")
