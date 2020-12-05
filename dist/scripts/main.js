@@ -28,7 +28,6 @@ export class Main {
         console.log('tmReady');
         if (game.user.isGM && game.userId == firstGM()) {
             if (isNewerVersion(game.modules.get("turnmarker").data.version, Settings.getVersion())) {
-                this.tms.clearAllMarkers();
                 renderUpdateWindow();
             }
             console.log(game)
