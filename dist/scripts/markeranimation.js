@@ -4,7 +4,6 @@ import { Settings } from './settings.js';
 export class MarkerAnimation {
 
     static initAnim() {
-        console.log('init animation')
         let animation = this.animate.bind();
         if(Settings.getShouldAnimate() && Settings.getTurnMarkerEnabled()) {
             this.start(animation)
@@ -28,7 +27,6 @@ export class MarkerAnimation {
     }
 
     static start(animation) {
-        console.log('start animation')
         if (!game.paused) {
             canvas.app.ticker.remove(animation);
             canvas.app.ticker.add(animation);
@@ -36,7 +34,6 @@ export class MarkerAnimation {
     }
 
     static stop(animation) {
-        console.log('stopping animation')
         canvas.app.ticker.remove(animation);
     }
 
