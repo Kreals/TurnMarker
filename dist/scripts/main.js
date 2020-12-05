@@ -19,9 +19,6 @@ export class Main {
 
     init(){
         this.tms = new MarkerList()
-        if (isNewerVersion(game.modules.get("turnmarker").data.version, Settings.getVersion())) {
-            this.tms.clearAllMarkers();
-        }
     }
 
     praiseTheLordAndPassTheAmmunition(){
@@ -29,6 +26,8 @@ export class Main {
         if (game.user.isGM && game.userId == firstGM()) {
             if (isNewerVersion(game.modules.get("turnmarker").data.version, Settings.getVersion())) {
                 renderUpdateWindow();
+                this.tms.clearAllMarkers()
+                await new Promise(r => setTimeout(r, 1000));
             }
             console.log(game)
             console.log(canvas)
