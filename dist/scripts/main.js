@@ -21,7 +21,7 @@ export class Main {
         this.tms = new MarkerList()
     }
 
-    praiseTheLordAndPassTheAmmunition(){
+    async praiseTheLordAndPassTheAmmunition(){
         console.log('tmReady');
         if (game.user.isGM && game.userId == firstGM()) {
             if (isNewerVersion(game.modules.get("turnmarker").data.version, Settings.getVersion())) {
