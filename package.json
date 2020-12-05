@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "TurnMarker",
-	"version": "2.6.31",
+	"version": "2.7.1",
 	"description": "",
 	"scripts": {
 		"package": "gulp package"

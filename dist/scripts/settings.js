@@ -1,6 +1,7 @@
 import { SettingsForm } from './settingsForm.js';
 import { modName } from './utils.js';
 
+
 const version = 'tm-version';
 const ratio = 'ratio';
 const animation = 'animation';

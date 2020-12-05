@@ -1,5 +1,6 @@
 import { imageTitles, Settings } from './settings.js';
 
+
 const videos = ['mp4', 'webm', 'ogg'];
 
 export class SettingsForm extends FormApplication {

@@ -1,3 +1,11 @@
+
+# 2.7.0
+- Major Code rewrite to OO classes
+- Turnmarker now handles simultanious combat encounters across all scenes (currently only one gm at a time)
+- Known issue with rerolling initiatives during combat where markers sometimes dont appear if the current token rolls an initiative that places it in the same position in the new turn order.
+- Known issue where turning animation rotation setting on requires clients to refresh to see the animation (server updates immediately).
+- Turn markers and start markers are now hidden correctly and toggle appropriately according to the combat tracker and the tokens hidden state. If either are hidden then the markes are also hidden.
+
 # 2.6.30
 - Fixed a duplicate setting in the settings window
 - Added human translated french localization to settings

@@ -1,5 +1,6 @@
 import { Settings } from "./settings.js";
 
+
 export class Chatter {
 
     static sendTurnMessage(combatant) {
