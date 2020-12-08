@@ -1,4 +1,4 @@
-/**
+  /**
  * Abstract Class Marker.
  *
  * @class Marker
@@ -110,20 +110,18 @@ export class Marker {
         let scene  = game.scenes.get(this.scene_id)
         switch (scene.data.gridType) {
             case 2: case 3: // Hex Rows
-                newX = token.x - ((ratio - token.height)* scene.data.grid)/2;
-                newY = token.y - ((ratio - token.height)* scene.data.grid)/2;
+                newX = token.x - ((((ratio - 1) * token.width)/2) * scene.data.grid);
+                newY = token.y - ((((ratio - 1) * token.height)/2) * scene.data.grid);
                 break;
             case 4: case 5: // Hex Columns
-                newX = token.x - ((ratio - token.width)* scene.data.grid)/2;
-                newY = token.y - ((ratio - token.width)* scene.data.grid)/2;
+                newX = token.x - ((((ratio - 1) * token.width)/2) * scene.data.grid);
+                newY = token.y - ((((ratio - 1) * token.height)/2) * scene.data.grid);
                 break;
             default: // Gridless and Square
-                newX = token.x - ((ratio - token.width)* scene.data.grid)/2;
-                newY = token.y - ((ratio - token.height)* scene.data.grid)/2;
+                newX = token.x - ((((ratio - 1) * token.width)/2) * scene.data.grid);
+                newY = token.y - ((((ratio - 1) * token.height)/2) * scene.data.grid);
                 break;
         }
-
         return { x: newX, y: newY };
     }
-
 }

@@ -3,7 +3,7 @@
 	"title": "Turn Marker",
 	"description": "Displays a (optionally animated) marker on the token who's active turn it is.",
 	"author": "Brunhine, Kreals",
-	"version": "2.7.6",
+	"version": "2.7.7",
 	"minimumCoreVersion": "0.5.6",
 	"compatibleCoreVersion": "0.7.8",
 	"esmodules": [
@@ -40,5 +40,5 @@
 	],
 	"url": "https://github.com/Kreals/TurnMarker.git",
 	"manifest": "https://raw.githubusercontent.com/Kreals/TurnMarker/main/dist/module.json",
-	"download": "https://raw.githubusercontent.com/Kreals/TurnMarker/v2.7.6/package/turnmarker-v2.7.6.zip"
+	"download": "https://raw.githubusercontent.com/Kreals/TurnMarker/v2.7.7/package/turnmarker-v2.7.7.zip"
 }
