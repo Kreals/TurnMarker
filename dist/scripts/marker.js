@@ -5,10 +5,10 @@
  */
 export class Marker {
 
-    constructor(scene_id, combat_id, token_id, tile_data) {
+    constructor(scene_id, combat_id, id, tile_data) {
         this.scene_id = scene_id
         this.combat_id = combat_id
-        this.token_id = token_id
+        this.id = id
         this.pendingDelete = false
         this.pendingUpdate = false
         this.pendingCreate = false
@@ -24,9 +24,9 @@ export class Marker {
         }
     }
 
-    setTokenId(tId){
-        this.token_id = tId;
-        this.tile_data.flags.token_id = tId;
+    setId(tId){
+        this.id = tId;
+        this.tile_data.flags.id = tId;
     }
 
     setCombatId(sId){
@@ -61,28 +61,16 @@ export class Marker {
         })
     }
 
-    getTokenInstance(){
-        let tokens = game.scenes.get(this.scene_id).data.tokens
-        let selected;
-        for(let i =0 ; i< tokens.length; i++){
-            if(tokens[i]._id === this.token_id){
-                selected = tokens[i]
-            }
-        }
-        return selected
-    }
-
     delete(){
         this.pendingDelete=true
     }
 
 
     toString(){
-        return this.scene_id + ' ' + this.token_id + ' ' + this.tile
+        return this.scene_id + ' ' + this.id + ' ' + this.tile
     }
 
-    
-
+    // the below methods should really be in a seperate Combat marker Class
     getImageDimensions(token, ratio) {
         let newWidth = 0;
         let newHeight = 0;

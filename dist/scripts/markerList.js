@@ -11,21 +11,15 @@ export class MarkerList {
 
     initTurnMarkers(isEnabled){
         game.combats.forEach(combat => {
-            if(combat.combatants){
-                let nullInitiatives = combat.combatants.filter(cbtnt => (cbtnt.initiative === null && cbtnt.token))
-                if (combat.scene.id && combat.current.tokenId && combat.current.round > 0 && nullInitiatives.length === 0){
-                    let tmarkers = game.scenes.get(combat.scene.id).data.tiles.filter(t => t.flags.turnMarker == true)
-                    for (let i = 0; i < tmarkers.length; i++) {
-                        if(combat.current.tokenId === tmarkers[i].flags.token_id &&
-                            combat.id === tmarkers[i].flags.combat_id){
-                            let tm = new TurnMarker(combat.scene.id, combat.id, combat.current.tokenId, tmarkers[i])
-                            this.add(tm)
-                            if(!isEnabled){tm.delete()}
-                            break;
-                        }
-                    }
-                    if(tmarkers.length === 0 && combat.current.tokenId && isEnabled){
-                        this.add(new TurnMarker(combat.scene.id, combat.id, combat.current.tokenId))
+            if(combat.combatant){
+                if (combat.scene.id && combat.current.round > 0){
+                    let tile = game.scenes.get(combat.scene.id).data.tiles.find(t => t.flags.turnMarker === true && t.flags.id === combat.combatant._id)
+                    if(tile){
+                        let tm = new TurnMarker(combat.scene.id, combat.id, combat.combatant._id, tile)
+                        this.add(tm)
+                        if(!isEnabled){tm.delete()}
+                    }else if(isEnabled){
+                        this.add(new TurnMarker(combat.scene.id, combat.id, combat.combatant._id))
                     }
                 }
             }
@@ -34,21 +28,15 @@ export class MarkerList {
 
     initStartMarkers(isEnabled){
         game.combats.forEach(combat => {
-            if(combat.combatants){
-                let nullInitiatives = combat.combatants.filter(cbtnt => (cbtnt.initiative === null && cbtnt.token))
-                if (combat.scene.id && combat.current.tokenId && combat.current.round > 0 && nullInitiatives.length === 0){
-                    let smarkers = game.scenes.get(combat.scene.id).data.tiles.filter(t => t.flags.startMarker == true)
-                    for (let i = 0; i < smarkers.length; i++) {
-                        if(combat.current.tokenId === smarkers[i].flags.token_id &&
-                            combat.id === smarkers[i].flags.combat_id){
-                            let sm = new StartMarker(combat.scene.id, combat.id, combat.current.tokenId, smarkers[i])
-                            this.add(sm)
-                            if(!isEnabled){sm.delete()}
-                            break;
-                        }
-                    }
-                    if(smarkers.length === 0 && combat.current.tokenId && isEnabled){
-                        this.add(new StartMarker(combat.scene.id, combat.id, combat.current.tokenId))
+            if(combat.combatant){
+                if (combat.scene.id && combat.current.round > 0){
+                    let tile = game.scenes.get(combat.scene.id).data.tiles.find(t => t.flags.startMarker === true && t.flags.id === combat.combatant._id)
+                    if(tile){
+                        let sm = new StartMarker(combat.scene.id, combat.id, combat.combatant._id, tile)
+                        this.add(sm)
+                        if(!isEnabled){sm.delete()}
+                    }else if(isEnabled){
+                        this.add(new StartMarker(combat.scene.id, combat.id, combat.combatant._id))
                     }
                 }
             }
@@ -78,35 +66,35 @@ export class MarkerList {
         }
     }
 
-    getTurnMarker(combat_id, token_id){
-        let tm = this.markerList.find(m => (m instanceof TurnMarker 
-            && combat_id === m.combat_id 
-            && token_id === m.token_id))
+    getTurnMarker(combat_id, cId){
+        let tm = this.markerList.find(m => (m instanceof TurnMarker
+            && combat_id === m.combat_id
+            && cId === m.id))
         return tm
     }
 
-    getStartMarker(combat_id, token_id){
+    getStartMarker(combat_id, cId){
         let sm = this.markerList.find(m => (m instanceof StartMarker 
             && combat_id === m.combat_id 
-            && token_id === m.token_id))
+            && cId === m.id))
         return sm
     }
 
 
-    getTurnMarkers(token_id){
+    getTurnMarkers(cId){
         let markers = []
         for (let i = this.markerList.length -1; i > -1; i--) {
-            if (token_id === this.markerList[i].token_id && this.markerList[i] instanceof TurnMarker){
+            if (cId === this.markerList[i].id && this.markerList[i] instanceof TurnMarker){
                 markers.push(this.markerList[i])
             }
         }
         return markers
     }
 
-    getStartMarkers(token_id){
+    getStartMarkers(cId){
         let markers = []
         for (let i = this.markerList.length -1; i > -1; i--) {
-            if (token_id === this.markerList[i].token_id && this.markerList[i] instanceof StartMarker){
+            if (cId === this.markerList[i].id && this.markerList[i] instanceof StartMarker){
                 markers.push(this.markerList[i])
             }
         }
@@ -115,9 +103,9 @@ export class MarkerList {
 
     deleteMarkersForCombat(combat){
         for (let i = combat.combatants.length -1; i > -1; i--) {
-            combat.combatants[i].tokenId
+            combat.combatants[i]._id
             for (let i2 = this.markerList.length -1; i2 > -1; i2--) {
-                if(combat.combatants[i].tokenId === this.markerList[i2].token_id 
+                if(combat.combatants[i]._id === this.markerList[i2].id 
                     && combat.id === this.markerList[i2].combat_id){
                     this.markerList[i2].delete()
                 }

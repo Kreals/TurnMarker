@@ -27,12 +27,19 @@ Hooks.on('tmSettingsChanged', async (d) => {
     turnmarkerMain.applySettings(d)
 });
 
-Hooks.on('preUpdateCombatant', async (combat, combatant, update) => {
-    turnmarkerMain.handlePreUpdateCombatent(combat, combatant, update)
-    //turnmarkerMain.deleteCombatMarkers(combat)
+
+Hooks.on('deleteCombatant', async (combat, combatant, update) => {
+    console.log(combat, combatant, update)
+    if(combat.combatants.length===1){
+        turnmarkerMain.deleteCombatMarkers(combat)
+    }
 })
 
-Hooks.on('preUpdateCombat', async (combat, update) => {
+Hooks.on('updateCombatant', async (combat, combatant, update) => {
+    turnmarkerMain.handlePreUpdateCombatent(combat, combatant, update)
+})
+
+Hooks.on('updateCombat', async (combat, update) => {
     turnmarkerMain.processNextTurn(combat, update)
 })
 
@@ -41,11 +48,15 @@ Hooks.on('createTile', (scene, tile) => {
 });
 
 Hooks.on('deleteTile', async (scene, tile) => {
+    console.log(turnmarkerMain.tms.markerList)
     turnmarkerMain.deleteLinkedMarkers(tile)
+    console.log(turnmarkerMain.tms.markerList)
+
 })
 
 Hooks.on('deleteCombat', async (combat) => {
     turnmarkerMain.deleteCombatMarkers(combat)
+    turnmarkerMain.clearTracker(combat)
 });
 
 Hooks.on('updateToken', (scene, updateToken, updateData) => {

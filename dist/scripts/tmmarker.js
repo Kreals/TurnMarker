@@ -6,8 +6,8 @@ import { Settings } from './settings.js';
  */
 export class TurnMarker extends Marker {
 
-    constructor(scene_id, combat_id, token_id, tile_data) {
-        super(scene_id, combat_id, token_id, tile_data)
+    constructor(scene_id, combat_id, id, tile_data) {
+        super(scene_id, combat_id, id, tile_data)
         //this.ratio = Settings.getRatio()
         if (this.pendingCreate){
             this.tile_data = this.create()
@@ -15,16 +15,10 @@ export class TurnMarker extends Marker {
     }
 
     create(){
-        let tokens = game.scenes.get(this.scene_id).data.tokens
-        let selected;
-        for(let i =0 ; i< tokens.length; i++){
-            if(tokens[i]._id === this.token_id){
-                selected = tokens[i]
-            }
-        }
-        if (selected){
-            let dims = this.getImageDimensions(selected, Settings.getRatio())
-            let center = this.getImageLocation(selected, Settings.getRatio())
+        let token = game.combats.get(this.combat_id).combatant.token
+        if (token){
+            let dims = this.getImageDimensions(token, Settings.getRatio())
+            let center = this.getImageLocation(token, Settings.getRatio())
             return {
                 img: Settings.getChoosenTMImagePath(),
                 width: dims.w,
@@ -33,17 +27,32 @@ export class TurnMarker extends Marker {
                 y: center.y,
                 z: 900,
                 rotation: 0,
-                hidden: (selected.hidden || game.combats.get(this.combat_id).combatant.hidden),
+                hidden: (token.hidden || game.combats.get(this.combat_id).combatant.hidden),
                 locked: false,
                 flags: {turnMarker: true, 
                     combat_id: this.combat_id, 
-                    token_id: this.token_id}
+                    id: this.id}
+            }
+        }else{
+            return {
+                img: Settings.getChoosenTMImagePath(),
+                width: 0,
+                height: 0,
+                x: 0,
+                y: 0,
+                z: 900,
+                rotation: 0,
+                hidden: true,
+                locked: false,
+                flags: {turnMarker: true, 
+                    combat_id: this.combat_id, 
+                    id: this.id}
             }
         }
     }
 
     move(update, ratio){
-        let token = this.getTokenInstance()
+        let token = game.combats.get(this.combat_id).combatant.token
         if(!update){update = {}}
         if (token){
             if(!update.x){update.x = token.x}
