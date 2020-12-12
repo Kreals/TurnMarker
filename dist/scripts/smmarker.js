@@ -8,17 +8,18 @@ export class StartMarker extends Marker {
 
     constructor(scene_id, combat_id, id, tile_data) {
         super(scene_id, combat_id, id, tile_data)
-        this.ratio=1.5
         if (this.pendingCreate){
             this.tile_data = this.create()
         }
     }
 
-    create(){
-        let token = game.combats.get(this.combat_id).combatant.token
+    create() {
+        // Get the real token from the combat tracker
+        let tokenId = game.combats.get(this.combat_id).combatant.tokenId;
+        let token = canvas.tokens.get(tokenId);
         if (token){
-            let dims = this.getImageDimensions(token, this.ratio)
-            let center = this.getImageLocation(token, this.ratio)
+            let dims = this.getImageDimensions(token, this.ratio);
+            let center = this.getImageLocation(token, dims);
             return {
                 img: Settings.getChoosenSMImagePath(),
                 width: dims.w,
@@ -49,21 +50,5 @@ export class StartMarker extends Marker {
                     id: this.id}
             }
         } 
-    }
-
-    move(update){
-        let token = game.combats.get(this.combat_id).combatant.token
-        if(!update){update = {}}
-        if (token){
-            if(!update.x){update.x = token.x}
-            if(!update.y){update.y = token.y}
-            let dims = this.getImageDimensions(token, this.ratio)
-            let center = this.getImageLocation(token, this.ratio)
-            this.update({
-                width: dims.w,
-                height: dims.h,
-                x: center.x,
-                y: center.y})
-        }
     }
 }

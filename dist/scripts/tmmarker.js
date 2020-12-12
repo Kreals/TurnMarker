@@ -8,17 +8,23 @@ export class TurnMarker extends Marker {
 
     constructor(scene_id, combat_id, id, tile_data) {
         super(scene_id, combat_id, id, tile_data)
-        //this.ratio = Settings.getRatio()
         if (this.pendingCreate){
             this.tile_data = this.create()
         }
     }
 
-    create(){
-        let token = game.combats.get(this.combat_id).combatant.token
+    /* @override */
+    get ratio() {
+        return Settings.getRatio();
+    }
+
+    create() {
+        // Get the real token from the combat tracker
+        let tokenId = game.combats.get(this.combat_id).combatant.tokenId;
+        let token = canvas.tokens.get(tokenId);
         if (token){
-            let dims = this.getImageDimensions(token, Settings.getRatio())
-            let center = this.getImageLocation(token, Settings.getRatio())
+            let dims = this.getImageDimensions(token, this.ratio);
+            let center = this.getImageLocation(token, dims);
             return {
                 img: Settings.getChoosenTMImagePath(),
                 width: dims.w,
@@ -49,21 +55,5 @@ export class TurnMarker extends Marker {
                     id: this.id}
             }
         }
-    }
-
-    move(update, ratio){
-        let token = game.combats.get(this.combat_id).combatant.token
-        if(!update){update = {}}
-        if (token){
-            if(!update.x){update.x = token.x}
-            if(!update.y){update.y = token.y}
-            let dims = this.getImageDimensions(token, ratio)
-            let center = this.getImageLocation(token, ratio)
-            this.update({
-                width: dims.w,
-                height: dims.h,
-                x: center.x,
-                y: center.y})
-        } 
     }
 }
