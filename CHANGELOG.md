@@ -1,4 +1,3 @@
-awd
 # 2.7.8
 -Fixed the hex issue but retained multi scene initialisation
 -Fixed issue where token markers would not reappear when token or combat turn with no longer hidden
