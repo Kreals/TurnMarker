@@ -1,7 +1,7 @@
 # 2.7.8
--Fixed the hex issue but retained multi scene initialisation
--Fixed issue where token markers would not reappear when token or combat turn with no longer hidden
--added ability to call module functions as macros from the game.turnmarker object.
+- Fixed the hex issue but retained multi scene initialisation
+- Fixed issue where token markers would not reappear when token or combat turn with no longer hidden
+- added ability to call module functions as macros from the game.turnmarker object.
 
 # 2.7.0
 - Major Code rewrite to OO classes
