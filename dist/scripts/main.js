@@ -44,7 +44,9 @@ export class Main {
 
             this.tms.sync();
         }
-        this.animation = MarkerAnimation.initAnim();
+        if(!this.animation){
+            this.animation = MarkerAnimation.initAnim();
+        }
     }
 
     processNextTurn(combat, update){
@@ -58,42 +60,44 @@ export class Main {
                     }
 
                     let prev_combatent = combat.combatants.find(combatant => combatant._id === tracker.prevCID)
-                    if(Settings.getTurnMarkerEnabled()){
-                        let tm = this.tms.getTurnMarker(combat.id, prev_combatent._id)
-                        if (tm === undefined){
-                            tm = new TurnMarker(combat.scene.id, combat.id, combat.combatant._id)
-                            this.tms.add(tm)
-                        }
-                        tm.setId(combat.combatant._id)
-                        if (combat.combatant.token){
-                            tm.hide((combat.combatant.token.hidden || combat.combatant.hidden))
-                            tm.move({}, Settings.getRatio())
-                        }else{
-                            tm.shrink()
-                        }
-                    }
-                    if(Settings.getStartMarkerEnabled()){
-                        let sm = this.tms.getStartMarker(combat.id, prev_combatent._id)
-                        if(sm === undefined){
-                            sm = new StartMarker(combat.scene.id, combat.id, combat.combatant._id)
-                            this.tms.add(sm)
-                        }
-                        sm.setId(combat.combatant._id)
-                        if (combat.combatant.token){
-                            sm.hide((combat.combatant.token.hidden || combat.combatant.hidden))
-                            sm.move({})
-                        }else{
-                            sm.shrink()
-                        }
-                    }
-                    if (Settings.shouldAnnounceTurns()){
-                        if (combat.combatant.token){
-                            if(!combat.combatant.token.hidden && !combat.combatant.hidden){
-                                Chatter.sendTurnMessage(combat.combatant);
+                    if(prev_combatent){
+                        if(Settings.getTurnMarkerEnabled()){
+                            let tm = this.tms.getTurnMarker(combat.id, prev_combatent._id)
+                            if (tm === undefined){
+                                tm = new TurnMarker(combat.scene.id, combat.id, combat.combatant._id)
+                                this.tms.add(tm)
                             }
-                        }else{
-                            if(!combat.combatant.hidden){
-                                Chatter.sendTurnMessage(combat.combatant);  
+                            tm.setId(combat.combatant._id)
+                            if (combat.combatant.token){
+                                tm.hide((combat.combatant.token.hidden || combat.combatant.hidden))
+                                tm.move({}, Settings.getRatio())
+                            }else{
+                                tm.shrink()
+                            }
+                        }
+                        if(Settings.getStartMarkerEnabled()){
+                            let sm = this.tms.getStartMarker(combat.id, prev_combatent._id)
+                            if(sm === undefined){
+                                sm = new StartMarker(combat.scene.id, combat.id, combat.combatant._id)
+                                this.tms.add(sm)
+                            }
+                            sm.setId(combat.combatant._id)
+                            if (combat.combatant.token){
+                                sm.hide((combat.combatant.token.hidden || combat.combatant.hidden))
+                                sm.move({})
+                            }else{
+                                sm.shrink()
+                            }
+                        }
+                        if (Settings.shouldAnnounceTurns()){
+                            if (combat.combatant.token){
+                                if(!combat.combatant.token.hidden && !combat.combatant.hidden){
+                                    Chatter.sendTurnMessage(combat.combatant);
+                                }
+                            }else{
+                                if(!combat.combatant.hidden){
+                                    Chatter.sendTurnMessage(combat.combatant);  
+                                }
                             }
                         }
                     }
@@ -161,13 +165,13 @@ export class Main {
         this.tms.sync()
     }
 
-    handlePreUpdateCombatent(combat, combatant, update){
+    handleUpdateCombatent(combat, combatant, update){
         if(update && update.hidden !== undefined){
-            let tms = this.tms.getTurnMarkers(combatant.tokenId)
+            let tms = this.tms.getTurnMarkers(update._id)
             for(let i=0; i < tms.length; i++){
                 tms[i].hide((combatant.token.hidden || update.hidden))
             }
-            let sms = this.tms.getStartMarkers(combatant.tokenId)
+            let sms = this.tms.getStartMarkers(update._id)
             for(let i=0; i < sms.length; i++){
                 sms[i].hide((combatant.token.hidden || update.hidden))
             }

@@ -55,7 +55,8 @@ export class MarkerList {
         let tms = this.markerList.filter(t => t instanceof TurnMarker)
         for (let i = 0; i < tms.length; i++) {
             tms[i].update(tile_data_template)
-            tms[i].move({}, ratio)
+            tms[i].ratio = ratio
+            tms[i].move()
         }
     }
 
@@ -63,6 +64,8 @@ export class MarkerList {
         let sms = this.markerList.filter(t => t instanceof StartMarker)
         for (let i = 0; i < sms.length; i++) {
             sms[i].update(tile_data_template)
+            sms[i].move()
+
         }
     }
 
@@ -149,22 +152,15 @@ export class MarkerList {
 
     clearAllMarkers(){
         //this is intended to remove all misconfigured tiles - might not belong in this class
-        game.scenes.forEach((scene, key, map) => {
+        game.scenes.forEach(async (scene, key, map) => {
             let tmarkers = scene.data.tiles.filter(t => t.flags.turnMarker == true)
             for (let i = 0; i < tmarkers.length; i++) {
-                scene.deleteEmbeddedEntity('Tile',  tmarkers[i]._id)
+                await scene.deleteEmbeddedEntity('Tile',  tmarkers[i]._id)
             }
 
             let smarkers = scene.data.tiles.filter(t => t.flags.startMarker == true)
             for (let i = 0; i < smarkers.length; i++) {
-                scene.deleteEmbeddedEntity('Tile',  smarkers[i]._id)
-            }
-        })
-
-        game.scenes.forEach((scene, key, map) => {
-            let smarkers = scene.data.tiles.filter(t => t.flags.startMarker == true)
-            for (let i = 0; i < smarkers.length; i++) {
-                scene.deleteEmbeddedEntity('Tile',  smarkers[i]._id)
+                await scene.deleteEmbeddedEntity('Tile',  smarkers[i]._id)
             }
         })
     }

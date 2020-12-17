@@ -14,9 +14,11 @@ CONFIG.debug.hooks = false
 let turnmarkerMain;
 
 Hooks.on('init', async () => {
+    game.turnmarker = game.turnmarker || {};
     Settings.registerSettings();
     turnmarkerMain = new Main()
     turnmarkerMain.init()
+    game.turnmarker = turnmarkerMain
 })
 
 Hooks.on('ready', () => {
@@ -29,14 +31,14 @@ Hooks.on('tmSettingsChanged', async (d) => {
 
 
 Hooks.on('deleteCombatant', async (combat, combatant, update) => {
-    console.log(combat, combatant, update)
-    if(combat.combatants.length===1){
-        turnmarkerMain.deleteCombatMarkers(combat)
-    }
+    let tmarkers = turnmarkerMain.tms.getTurnMarkers(combatant._id)
+    let smarkers = turnmarkerMain.tms.getStartMarkers(combatant._id)
+    turnmarkerMain.tms.deleteFromList(tmarkers)
+    turnmarkerMain.tms.deleteFromList(smarkers)
 })
 
 Hooks.on('updateCombatant', async (combat, combatant, update) => {
-    turnmarkerMain.handlePreUpdateCombatent(combat, combatant, update)
+    turnmarkerMain.handleUpdateCombatent(combat, combatant, update)
 })
 
 Hooks.on('updateCombat', async (combat, update) => {
@@ -48,10 +50,7 @@ Hooks.on('createTile', (scene, tile) => {
 });
 
 Hooks.on('deleteTile', async (scene, tile) => {
-    console.log(turnmarkerMain.tms.markerList)
     turnmarkerMain.deleteLinkedMarkers(tile)
-    console.log(turnmarkerMain.tms.markerList)
-
 })
 
 Hooks.on('deleteCombat', async (combat) => {

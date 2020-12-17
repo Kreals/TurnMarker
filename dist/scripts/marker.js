@@ -13,6 +13,7 @@ export class Marker {
         this.pendingUpdate = false
         this.pendingCreate = false
         this.tile_data = undefined
+        this.ratio = 1.5
         if (tile_data){
             this.tile_data = tile_data
 
@@ -22,10 +23,6 @@ export class Marker {
         if (this.constructor == Marker) {
             throw new Error("Abstract classes can't be instantiated.");
         }
-    }
-
-    get ratio() {
-        return 1.5;
     }
 
     setId(tId){
@@ -51,8 +48,8 @@ export class Marker {
 
     move() {
         // Get the real token from the combat tracker
-        let tokenId = game.combats.get(this.combat_id).combatant.tokenId;
-        let token = canvas.tokens.get(tokenId);
+        let token = game.combats.get(this.combat_id).combatant.token;
+
         if (token) {
             let dims = this.getImageDimensions(token, this.ratio)
             let center = this.getImageLocation(token, dims)
@@ -81,7 +78,6 @@ export class Marker {
         this.pendingDelete=true
     }
 
-
     toString(){
         return this.scene_id + ' ' + this.id + ' ' + this.tile
     }
@@ -99,19 +95,19 @@ export class Marker {
 
         switch (scene.data.gridType) {
             case 2: case 3: // Hex Rows
-                newWidth = newHeight = token.data.height * ratio;
+                newWidth = newHeight = token.height * ratio;
                 break;
             case 4: case 5: // Hex Columns
-                newWidth = newHeight = token.data.width * ratio;
+                newWidth = newHeight = token.width * ratio;
                 break;
             default: // Gridless and Square
-                newWidth = token.data.width * ratio;
-                newHeight = token.data.height * ratio;
+                newWidth = token.width * ratio;
+                newHeight = token.height * ratio;
                 break;
         }
-
         return { w: newWidth * scene.data.grid, h: newHeight * scene.data.grid};
     }
+
 
     /**
      * Get location relative to token center
@@ -120,8 +116,24 @@ export class Marker {
      * @returns {Object} x, y coords to place the marker
      */
     getImageLocation(token, dims) {
-        let newX = token.center.x - dims.w / 2;
-        let newY = token.center.y - dims.h / 2;
+        let scene  = game.scenes.get(this.scene_id)
+        let center = ''
+        switch (scene.data.gridType) {
+            case 2: case 3: // Hex Rows
+                center = {  x: token.x + (token.width * Math.sqrt(3)/2)/2 * scene.data.grid,
+                            y: token.y + token.height/2 * scene.data.grid}
+                break;
+            case 4: case 5: // Hex Columns
+                center = {  x: token.x + token.width/2 * scene.data.grid, 
+                            y: token.y + (token.width * Math.sqrt(3)/2)/2 * scene.data.grid}
+                break;
+            default: // Gridless and Square
+                center = {  x: token.x + token.width/2 * scene.data.grid, 
+                            y: token.y + token.height/2 * scene.data.grid}
+                break;
+        }
+        let newX = center.x - dims.w / 2;
+        let newY = center.y - dims.h / 2;
         return { x: newX, y: newY };
     }
 }

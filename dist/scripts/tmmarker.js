@@ -13,15 +13,9 @@ export class TurnMarker extends Marker {
         }
     }
 
-    /* @override */
-    get ratio() {
-        return Settings.getRatio();
-    }
-
     create() {
         // Get the real token from the combat tracker
-        let tokenId = game.combats.get(this.combat_id).combatant.tokenId;
-        let token = canvas.tokens.get(tokenId);
+        let token = game.combats.get(this.combat_id).combatant.token;
         if (token){
             let dims = this.getImageDimensions(token, this.ratio);
             let center = this.getImageLocation(token, dims);
