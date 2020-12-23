@@ -3,9 +3,7 @@ import { Main } from './main.js';
 
 
 /*  issues
-    -turnmarker doesnt get placed when rerolling the last initiative on a token which is then subsequently selected as the 
-        next (first?) token in the turn order after combat is started.. pain in the arse. Need to do something with update 
-        combatant call to capture this event >.<
+    - markers don't update for all combats if toekn is in 2 encounters simultaniously
     - when animation setting is toggled the non-gm clients dont respect the setting until refresh
     -TODO - look into adding tokenMagic FX
 */
