@@ -46,11 +46,15 @@ Marker images by [Rin](https://foundryvtt.com/community/rin)
 |--|--|--|
 |<img src="dist/assets/bluesky.png" width="150" />|<img src="dist/assets/universe.png" width="150" />|<img src="dist/assets/prosperity.png" width="150" />|
 
-#### Custom Image Path
-Sets the path to an image to be used instead of the included images
 
 #### Announce Turns
 If enabled, a chat message will be sent when the turn in combat changes (unless the combatant is hidden in the combat tracker).
+
+#### Start Marker
+If enabled, creates a start marker which marks the position of the token when that tokens turn begins.
+
+#### Custom Image Path
+Sets the path to an image to be used instead of the included images for the turn marker or the start marker
 
 ## Compatibility
 Most recently tested on [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") version 0.7.9.
