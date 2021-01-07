@@ -12,8 +12,8 @@ CONFIG.debug.hooks = false
 let turnmarkerMain;
 
 Hooks.on('init', async () => {
-    game.turnmarker = game.turnmarker || {};
     Settings.registerSettings();
+    game.turnmarker = game.turnmarker || {};
     turnmarkerMain = new Main()
     turnmarkerMain.init()
     game.turnmarker = turnmarkerMain

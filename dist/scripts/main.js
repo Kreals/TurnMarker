@@ -11,7 +11,6 @@ import { firstGM } from './utils.js';
 export class Main {
 
     constructor() {
-        this.lastTokenId = '';
         this.animation = undefined;
         this.tms = undefined;
         this.combatsTracker = [];
@@ -24,13 +23,13 @@ export class Main {
     async praiseTheLordAndPassTheAmmunition(){
         console.log('tmReady');
         if (game.user.isGM && game.userId == firstGM()) {
+            console.log(game);
+            console.log(canvas);
            if (isNewerVersion(game.modules.get("turnmarker").data.version, Settings.getVersion())) {
                 renderUpdateWindow();
                 this.tms.clearAllMarkers();
                 await new Promise(r => setTimeout(r, 1000));
            }
-            console.log(game);
-            console.log(canvas);
             this.tms.initTurnMarkers(Settings.getTurnMarkerEnabled());
             this.tms.initStartMarkers(Settings.getStartMarkerEnabled());
             this.tms.markerList.map((marker, index, array)=> {

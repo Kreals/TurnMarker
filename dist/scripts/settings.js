@@ -215,6 +215,7 @@ export class Settings {
             config: false,
             type: Boolean,
             default: true,
+            restricted: true
         });
 
         game.settings.register(modName, interval, {
@@ -223,7 +224,8 @@ export class Settings {
             scope: 'world',
             config: false,
             type: Number,
-            default: 100
+            default: 100,
+            restricted: true
         });
 
         game.settings.register(modName, tmimageselector, {
@@ -262,7 +264,8 @@ export class Settings {
             scope: 'world',
             config: false,
             type: Boolean,
-            default: true
+            default: true,
+            restricted: true
         });
 
         game.settings.register(modName, announceImage, {
@@ -271,7 +274,8 @@ export class Settings {
             scope: 'world',
             config: false,
             type: Boolean,
-            default: true
+            default: true,
+            restricted: true
         });
 
         game.settings.register(modName, announceAsActor, {
@@ -280,7 +284,8 @@ export class Settings {
             scope: 'world',
             config: false,
             type: Boolean,
-            default: true
+            default: true,
+            restricted: true
         });
 
         game.settings.register(modName, turnMarkerEnabled, {

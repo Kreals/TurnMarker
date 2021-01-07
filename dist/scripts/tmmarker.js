@@ -8,6 +8,7 @@ export class TurnMarker extends Marker {
 
     constructor(scene_id, combat_id, id, tile_data) {
         super(scene_id, combat_id, id, tile_data)
+        this.ratio = Settings.getRatio()
         if (this.pendingCreate){
             this.tile_data = this.create()
         }
