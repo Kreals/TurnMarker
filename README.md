@@ -53,7 +53,7 @@ Sets the path to an image to be used instead of the included images
 If enabled, a chat message will be sent when the turn in combat changes (unless the combatant is hidden in the combat tracker).
 
 ## Compatibility
-Most recently tested on [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") version 0.7.8.
+Most recently tested on [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") version 0.7.9.
 
 ## Feedback
 Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/Kreals/TurnMarker/issues "Issue Tracker")
