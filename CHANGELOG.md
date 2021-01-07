@@ -1,47 +1,51 @@
+# 2.7.10
+- Compatability version updated - no new issues found in Foundry version 0.7.9.
+
+# 2.7.9
+- Fixed issue with markers not correctly reflecting creature size.
+
 # 2.7.8
-- Fixed the hex issue but retained multi scene initialisation
-- Fixed issue where token markers would not reappear when token or combat turn with no longer hidden
+- Fixed the hex issue but retained multi scene initialisation.
+- Fixed issue where token markers would not reappear when token or combat turn was no longer hidden.
 - added ability to call module functions as macros from the game.turnmarker object.
 
 # 2.7.0
 - Major Code rewrite to OO classes
-- Turnmarker now handles simultanious combat encounters across all scenes (currently only one gm at a time)
+- Turnmarker now handles simultanious combat encounters across all scenes (currently only one gm at a time -- maybe?).
 - Known issue with rerolling initiatives during combat where markers sometimes dont appear if the current token rolls an initiative that places it in the same position in the new turn order.
-- Known issue where turning animation rotation setting on requires clients to refresh to see the animation (server updates immediately).
-- Turn markers and start markers are now hidden correctly and toggle appropriately according to the combat tracker and the tokens hidden state. If either are hidden then the markers are also hidden.
+- Known issue where turning animation rotation setting on requires clients to refresh to see the animation (gm game instance updates immediately).
+- Turn markers and Start markers are now hidden correctly and toggle appropriately according to the combat tracker and the tokens hidden state. If either are hidden then the markers are also hidden.
 
 # 2.6.30
-- Fixed a duplicate setting in the settings window
-- Added human translated french localization to settings
-- Added google translate language localizations for the turn announcements (en, fr, de, jp, ko)
-- Fixed an issue with multipl markers showing at the same time
-- Fixed an issue where settings would not apply properly
-- General refactoring and similar stability fixes
+- Fixed a duplicate setting in the settings window.
+- Added human translated french localization to settings.
+- Added google translate language localizations for the turn announcements (en, fr, de, jp, ko).
+- Fixed an issue with multiple markers showing at the same time.
+- Fixed an issue where settings would not apply properly.
+- General refactoring and similar stability fixes.
 
 # 2.6.24
-- Fixed some variable mismatches in the settings variable
+- Fixed some variable mismatches in the settings variable.
 
 # 2.6.23
-- Major code refactor: removed redundent hook calls and simplified logic for simpler debugging and maintenance 
-- Fixed issue where start marker would create duplicates
-- Made both the start marker and the turn marker both reflect the tokens hidden status
-- Fixed the custom start marker so it now actually works
+- Major code refactor: removed redundent hook calls and simplified logic for simpler debugging and maintenance.
+- Fixed issue where start marker would create duplicates.
+- Made both the start marker and the turn marker both reflect the tokens hidden status.
+- Fixed the custom start marker so it now actually works.
 - Removed video preview, unsure what it was for.
-- Added start marker preview window in settings
-- Added functionality that applies settings immediately when saved (GM only)
-- Fixed the settings screen and made some minor text changes
+- Added start marker preview window in settings.
+- Added functionality that applies settings immediately when saved (GM only -- maybe?).
+- Fixed the settings screen and made some minor text changes.
 
 # 2.6.22
-- Fixed an issue where marker tile wouldn't re-appear if the token visibility was toggeled back on during it's turn
+- Fixed an issue where marker tile wouldn't re-appear if the token visibility was toggeled back on during it's turn.
 
 # 2.6.21
 - Fixed a bug where tokenless combatants threw an error and left the turn marker would stay on the previous token. Now the token marker dissappears when a tokenless combatent is taking a turn and reappears when the next combantent with a token takes a turn.
-
-- Fixed an issue with rotation not stopping on pause and occasionally increaing speed due to bad variable assignments
-
+- Fixed an issue with rotation not stopping on pause and occasionally increasing speed due to bad variable assignments.
 
 # 2.6.20
-- Rearrange repo for new workflow
+- Rearrange repo for new workflow.
 
 # 2.6.9
 - Fix console error when moving token outside of combat
