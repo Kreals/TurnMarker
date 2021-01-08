@@ -16,6 +16,10 @@ To install this module manually:
 4. Click 'Install' and wait for installation to complete
 5. Don't forget to enable the module in game using the "Manage Module" button
 
+## Known Issues
+- Incompatability with "Not Your Turn" causing weird Turnmarker behaviour.
+
+
 ## Usage
 The turn marker will move to the active token on their turn, and move with them as they move:
 ![example](/examples/example.webm)
