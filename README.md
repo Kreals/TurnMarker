@@ -1,3 +1,6 @@
+This fork is obsolete. The official listing is now at https://github.com/kckaiwei/TurnMarker-alt.
+________________________________
+
 # Turn Marker
 **Turn Marker** is a module for [Foundry VTT](https://foundryvtt.com/ "Foundry VTT") that adds an image under a token who is currently active in the combat tracker. This is completely system agnostic, and fully customizable to fit right into your game.
 
@@ -76,4 +79,4 @@ This work is licensed under Foundry Virtual Tabletop [EULA - Limited License Agr
 
 The previous work can be found at [Brunhine's github repository](https://github.com/Brunhine/TurnMarker) 
 
-The included images are created by [Rin](https://foundryvtt.com/community/rin) (rin#0002 on Discord)
+The included images are created by [Rin](https://foundryvtt.com/community/rin) (rin#0002 on Discord)~~
