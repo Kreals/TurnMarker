@@ -1,4 +1,4 @@
-This fork is obsolete. The official listing is now at https://github.com/kckaiwei/TurnMarker-alt.
+# This fork is obsolete. The official listing is now at https://github.com/kckaiwei/TurnMarker-alt.
 ________________________________
 
 # Turn Marker
